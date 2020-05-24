@@ -101,8 +101,8 @@ MATLAB | NumPy | 注释
 help func | info(func)或者help(func)或func?（在IPython的） | 获得函数func的帮助
 which func | [请参阅备注](#备注) | 找出func定义的位置
 type func | source(func)或者func??（在Ipython中） | func的打印源（如果不是本机函数）
-a && b | a and b | 短路逻辑AND运算符（Python本机运算符）; 只有标量参数
-a || b | a or b | 短路逻辑OR运算符（Python本机运算符）; 只有标量参数
+a && b | a and b | 短路逻辑AND运算符（Python原生运算符只支持标量参数）
+a \|\| b | a or b | 短路逻辑OR运算符（Python原生运算符只支持标量参数）
 1\*i，1\*j， 1i，1j | 1j | 复数
 eps | np.spacing(1) | 1与最近的浮点数之间的距离。
 ode45 | scipy.integrate.solve_ivp(f) | 将ODE与Runge-Kutta 4,5集成
@@ -115,79 +115,79 @@ MATLAB | NumPy | 注释
 ndims(a) | ndim(a) 要么 a.ndim | 获取数组的维数
 numel(a) | size(a) 要么 a.size | 获取数组的元素数
 size(a) | shape(a) 要么 a.shape | 得到矩阵的“大小”
-size(a,n) | a.shape[n-1] | 获取数组第n维元素的数量a。（请注意，MATLAB®使用基于1的索引，而Python使用基于0的索引，请参阅[备注](#备注)）
-[ 1 2 3; 4 5 6 ] | array([[1.,2.,3.], [4.,5.,6.]]) | 2x3矩阵文字
-[ a b; c d ] | block([[a,b], [c,d]]) | 从块构造一个矩阵a，b，c，和d
-a(end) | a[-1] | 访问1xn矩阵中的最后一个元素 a
-a(2,5) | a[1,4] | 第二行，第五列中的访问元素
-a(2,:) | a[1] 要么 a[1,:] | 整个第二排 a
-a(1:5,:) | a[0:5]或a[:5]或a[0:5,:] | 前五行 a
-a(end-4:end,:) | a[-5:] | 最后五行 a
-a(1:3,5:9) | a[0:3][:,4:9] | 第一至第三行以及第五至第九列a。这提供了只读访问权限。
+size(a,n) | a.shape[n-1] | 获取数组a第n维元素的数量。（请注意，MATLAB®使用基于1的索引，而Python使用基于0的索引，请参阅[备注](#备注)）
+[ 1 2 3; 4 5 6 ] | array([[1.,2.,3.], [4.,5.,6.]]) | 2x3矩阵字面量
+[ a b; c d ] | block([[a,b], [c,d]]) | 从块a，b，c，和d构造一个矩阵
+a(end) | a[-1] | 访问1xn矩阵a中的最后一个元素
+a(2,5) | a[1,4] | 访问a第二行，第五列的元素
+a(2,:) | a[1] 要么 a[1,:] | 整个第二排
+a(1:5,:) | a[0:5]或a[:5]或a[0:5,:] | 前五行
+a(end-4:end,:) | a[-5:] | 最后五行
+a(1:3,5:9) | a[0:3][:,4:9] | 第一至第三行以及第五至第九列。这提供了只读访问权限。
 a([2,4,5],[1,3]) | a[ix_([1,3,4],[0,2])] | 行2,4和5以及第1列和第3列。这允许修改矩阵，并且不需要常规切片。
-a(3:2:21,:) | a[ 2:21:2,:] | 每隔一行a，从第三行开始到第二十一行
-a(1:2:end,:) | a[ ::2,:] | 每一行a，从第一行开始
-a(end: -1:1,:) 要么 flipud(a) | a[ ::-1,:] | a 行以相反的顺序排列
-a([1:end 1],: ) | a[r_[:len(a),0]] | a 附加到末尾的第一行的副本
-a.' | a.transpose() 要么 a.T | 转置 a
-a' | a.conj().transpose() 要么 a.conj().T | 共轭转置 a
-a * b | a @ b | 矩阵乘法
-a .* b | a * b | 元素乘法
+a(3:2:21,:) | a[ 2:21:2,:] | 每隔一行，从第三行开始到第二十一行
+a(1:2:end,:) | a[ ::2,:] | 每隔一行，从第一行开始到最后一行
+a(end: -1:1,:) 要么 flipud(a) | a[ ::-1,:] | 以相反的顺序排列 a 的各行
+a([1:end 1],: ) | a[r_[:len(a),0]] | 把第一行的副本附加到其末尾
+a.' | a.transpose() 要么 a.T | 转置
+a' | a.conj().transpose() 要么 a.conj().T | 共轭转置
+a \* b | a @ b | 矩阵乘法
+a .\* b | a \* b | 元素乘法
 a./b | a/b | 元素划分
-a.^3 | a**3 | 元素取幂
+a.^3 | a\*\*3 | 元素取幂
 (a>0.5) | (a>0.5) | 其i，jth元素为（a_ij> 0.5）的矩阵。Matlab结果是一个0和1的数组。NumPy结果是布尔值的数组False和True。
-find(a>0.5) | nonzero(a>0.5) | 找到指数在哪里（a> 0.5）
-a(:,find(v>0.5)) | a[:,nonzero(v>0.5)[0]] | 提取a向量v> 0.5 的columms
-a(:,find(v>0.5)) | a[:,v.T>0.5] | 提取a列向量v> 0.5的列的列
-a(a<0.5)=0 | a[a<0.5]=0 | a 小于0.5的元素归零
-a .* (a>0.5) | a * (a>0.5) | a 小于0.5的元素归零
+find(a>0.5) | nonzero(a>0.5) | 找到（a> 0.5）的元素下标
+a(:,find(v>0.5)) | a[:,nonzero(v>0.5)[0]] | 提取a向量v> 0.5 的列
+a(:,find(v>0.5)) | a[:,v.T>0.5] | 提取a中列向量v> 0.5的列
+a(a<0.5)=0 | a[a<0.5]=0 | a 中小于0.5的元素归零
+a .* (a>0.5) | a * (a>0.5) | a中 小于0.5的元素归零
 a(: ) = 3 | a[:] = 3 | 将所有值设置为相同的标量值
-y=x | y = x.copy() | numpy通过引用分配
-y=x(2,:) | y = x[1,:].copy() | numpy切片是参考
+y=x | y = x.copy() | numpy是引用赋值
+y=x(2,:) | y = x[1,:].copy() | numpy切片是视图
 y=x(: ) | y = x.flatten() | 将数组转换为向量（请注意，这会强制复制）
-1:10 | arange(1.,11.)或r_[1.:11.]或 r_[1:10:10j] | 创建一个增加的向量（参见[备注](#备注)）
-0:9 | arange(10.)或 r_[:10.]或 r_[:9:10j] | 创建一个增加的向量（参见注释范围）
+1:10 | arange(1.,11.)或r_[1.:11.]或 r_[1:10:10j] | 创建一个递增的向量（参见[备注](#备注)）
+0:9 | arange(10.)或 r_[:10.]或 r_[:9:10j] | 创建一个递增的向量（参见注释范围）
 [1:10]' | arange(1.,11.)[:, newaxis] | 创建列向量
 zeros(3,4) | zeros((3,4)) | 3x4二维数组，充满64位浮点零
 zeros(3,4,5) | zeros((3,4,5)) | 3x4x5三维数组，全部为64位浮点零
-ones(3,4) | ones((3,4)) | 3x4二维数组，充满64位浮点数
+ones(3,4) | ones((3,4)) | 3x4二维数组，充满64位浮点数1
 eye(3) | eye(3) | 3x3单位矩阵
-diag(a) | diag(a) | 矢量对角元素 a
-diag(a,0) | diag(a,0) | 方形对角矩阵，其非零值是元素 a
+diag(a) | diag(a) | a的主对角元素组成的矢量
+diag(a,0) | diag(a,0) | 主对角元素为a的方形对角矩阵
 rand(3,4) | random.rand(3,4) 要么 random.random_sample((3, 4)) | 随机3x4矩阵
 linspace(1,3,4) | linspace(1,3,4) | 4个等间距的样本，介于1和3之间
-[x,y]=meshgrid(0:8,0:5) | mgrid[0:9.,0:6.] 要么 meshgrid(r_[0:9.],r_[0:6.] | 两个2D数组：一个是x值，另一个是y值
+[x, y]=meshgrid(0:8,0:5) | mgrid[0:9., 0:6.] 要么 meshgrid(r_[0:9.],r_[0:6.] | 两个2D数组：一个是x值，另一个是y值
   | ogrid[0:9.,0:6.] 要么 ix_(r_[0:9.],r_[0:6.] | 在网格上评估函数的最佳方法
-[x,y]=meshgrid([1,2,4],[2,4,5]) | meshgrid([1,2,4],[2,4,5]) |  
+[x,y]=meshgrid([1,2,4], [2,4,5]) | meshgrid([1,2,4], [2,4,5]) |  
   | ix_([1,2,4],[2,4,5]) | 在网格上评估函数的最佳方法
-repmat(a, m, n) | tile(a, (m, n)) | 用n份副本创建m a
-[a b] | concatenate((a,b),1)或者hstack((a,b))或 column_stack((a,b))或c_[a,b] | 连接a和的列b
-[a; b] | concatenate((a,b))或vstack((a,b))或r_[a,b] | 连接a和的行b
+repmat(a, m, n) | tile(a, (m, n)) | 创建a 的m*n份副本的大矩阵
+[a b] | concatenate((a,b),1)或者hstack((a,b))或 column_stack((a,b))或c_[a,b] | 连接a和b的列
+[a; b] | concatenate((a,b))或vstack((a,b))或r_[a,b] | 连接a和b的行
 max(max(a)) | a.max() | 最大元素a（对于matlab，ndims（a）<= 2）
-max(a) | a.max(0) | 每列矩阵的最大元素 a
-max(a,[],2) | a.max(1) | 每行矩阵的最大元素 a
+max(a) | a.max(0) | 矩阵的每列最大元素 
+max(a,[],2) | a.max(1) | 矩阵的每行最大元素
 max(a,b) | maximum(a, b) | 比较a和b逐个元素，并返回每对中的最大值
-norm(v) | sqrt(v @ v) 要么 np.linalg.norm(v) | L2矢量的规范 v
+norm(v) | sqrt(v @ v) 要么 np.linalg.norm(v) | 矢量v的L2范数
 a & b | logical_and(a,b) | 逐个元素AND运算符（NumPy [ufunc](#备注)）[请参阅备注LOGICOPS](#备注)
-a | b | logical_or(a,b) | 逐个元素OR运算符（NumPy ufunc）请参阅注释LOGICOPS
+a \| b | logical_or(a,b) | 逐个元素OR运算符（NumPy ufunc）请参阅注释LOGICOPS
 bitand(a,b) | a & b | 按位AND运算符（Python native和NumPy ufunc）
-bitor(a,b) | a | b | 按位OR运算符（Python native和NumPy ufunc）
-inv(a) | linalg.inv(a) | 方阵的逆 a
-pinv(a) | linalg.pinv(a) | 矩阵的伪逆 a
-rank(a) | linalg.matrix_rank(a) | 二维数组/矩阵的矩阵秩 a
+bitor(a,b) | a \| b | 按位OR运算符（Python native和NumPy ufunc）
+inv(a) | linalg.inv(a) | 方阵的逆
+pinv(a) | linalg.pinv(a) | 矩阵的伪逆
+rank(a) | linalg.matrix_rank(a) | 二维数组/矩阵 a 的矩阵秩
 a\b | linalg.solve(a,b)如果a是正方形; linalg.lstsq(a,b) 除此以外 | ax = b的解为x
-b/a | 解决aT xT = bT | xa = b的解为x
-[U,S,V]=svd(a) | U, S, Vh = linalg.svd(a), V = Vh.T | 奇异值分解 a
+b/a | 解a.T x.T = b.T | xa = b的解为x
+[U,S,V]=svd(a) | U, S, Vh = linalg.svd(a), V = Vh.T | 奇异值分解
 chol(a) | linalg.cholesky(a).T | 矩阵的cholesky分解（chol(a)在matlab中返回一个上三角矩阵，但linalg.cholesky(a)返回一个下三角矩阵）
-[V,D]=eig(a) | D,V = linalg.eig(a) | 特征值和特征向量 a
-[V,D]=eig(a,b) | D,V = scipy.linalg.eig(a,b) | 特征值和特征向量a，b
-[V,D]=eigs(a,k) |   | 找到k最大的特征值和特征向量a
+[V,D]=eig(a) | D,V = linalg.eig(a) | 特征值和特征向量
+[V,D]=eig(a,b) | D,V = scipy.linalg.eig(a,b) | a和b的特征值和特征向量
+[V,D]=eigs(a,k) |   | 找到k个模最大的特征值和特征向量
 [Q,R,P]=qr(a,0) | Q,R = scipy.linalg.qr(a) | QR分解
-[L,U,P]=lu(a) | L,U = scipy.linalg.lu(a) 要么 LU,P=scipy.linalg.lu_factor(a) | LU分解（注：P（Matlab）==转置（P（numpy）））
+[L,U,P]=lu(a) | L,U = scipy.linalg.lu(a) 要么 L,U,P=scipy.linalg.lu_factor(a) | LU分解（注：P（Matlab）==转置（P（numpy）））
 conjgrad | scipy.sparse.linalg.cg | 共轭渐变求解器
-fft(a) | fft(a) | 傅立叶变换 a
-ifft(a) | ifft(a) | 逆傅立叶变换 a
-sort(a) | sort(a) 要么 a.sort() | 对矩阵进行排序
+fft(a) | fft(a) | 傅立叶变换 
+ifft(a) | ifft(a) | 逆傅立叶变换
+sort(a) | sort(a) 要么 a.sort() | 对矩阵a进行排序
 [b,I] = sortrows(a,i) | I = argsort(a[:,i]), b=a[I,:] | 对矩阵的行进行排序
 regress(y,X) | linalg.lstsq(X,y) | 多线性回归
 decimate(x, q) | scipy.signal.resample(x, len(x)/q) | 采用低通滤波的下采样
@@ -206,7 +206,7 @@ squeeze(a) | a.squeeze() |  
  被调用，而是
  使用方括号进行 *索引* ，这允许在参数中使用Python的切片语法。
 
-**逻辑运算**：＆或| 在NumPy中是按位AND / OR，而在Matlab＆和|中 是逻辑AND / OR。任何具有重要编程经验的人都应该清楚这种差异。这两者似乎工作原理相同，但存在重要差异。如果您使用过Matlab的＆或| 运算符，您应该使用NumPy ufuncs logical_and / logical_or。Matlab和NumPy的＆和|之间的显着差异 运营商是：
+**逻辑运算**：＆或\| 在NumPy中是按位AND / OR，而在Matlab ＆和\|中 是逻辑AND / OR。任何具有重要编程经验的人都应该清楚这种差异。这两者似乎工作原理相同，但存在重要差异。如果您使用过Matlab的＆或\| 运算符，您应该使用NumPy ufuncs logical_and / logical_or。Matlab和NumPy的＆和\|之间的显着差异 运营商是：
 
 - 非逻辑{0,1}输入：NumPy的输出是输入的按位AND。Matlab将任何非零值视为1并返回逻辑AND。例如，NumPy中的（3和4）是0，而在Matlab中，3和4都被认为是逻辑真，而（3和4）返回1。
 - 优先级：NumPy的＆运算符优先于<和>之类的逻辑运算符; Matlab是相反的。
