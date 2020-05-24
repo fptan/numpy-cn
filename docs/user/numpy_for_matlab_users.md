@@ -101,8 +101,8 @@ MATLAB | NumPy | 注释
 help func | info(func)或者help(func)或func?（在IPython的） | 获得函数func的帮助
 which func | [请参阅备注](#备注) | 找出func定义的位置
 type func | source(func)或者func??（在Ipython中） | func的打印源（如果不是本机函数）
-a && b | a and b | 短路逻辑AND运算符（Python本机运算符）; 只有标量参数
-a || b | a or b | 短路逻辑OR运算符（Python本机运算符）; 只有标量参数
+a && b | a and b | 短路逻辑AND运算符（Python原生运算符只支持标量参数）
+a \|\| b | a or b | 短路逻辑OR运算符（Python原生运算符只支持标量参数）
 1\*i，1\*j， 1i，1j | 1j | 复数
 eps | np.spacing(1) | 1与最近的浮点数之间的距离。
 ode45 | scipy.integrate.solve_ivp(f) | 将ODE与Runge-Kutta 4,5集成
@@ -131,16 +131,16 @@ a(end: -1:1,:) 要么 flipud(a) | a[ ::-1,:] | a 行以相反的顺序排列
 a([1:end 1],: ) | a[r_[:len(a),0]] | a 附加到末尾的第一行的副本
 a.' | a.transpose() 要么 a.T | 转置 a
 a' | a.conj().transpose() 要么 a.conj().T | 共轭转置 a
-a * b | a @ b | 矩阵乘法
-a .* b | a * b | 元素乘法
+a \* b | a @ b | 矩阵乘法
+a .\* b | a \* b | 元素乘法
 a./b | a/b | 元素划分
-a.^3 | a**3 | 元素取幂
+a.^3 | a\*\*3 | 元素取幂
 (a>0.5) | (a>0.5) | 其i，jth元素为（a_ij> 0.5）的矩阵。Matlab结果是一个0和1的数组。NumPy结果是布尔值的数组False和True。
 find(a>0.5) | nonzero(a>0.5) | 找到指数在哪里（a> 0.5）
 a(:,find(v>0.5)) | a[:,nonzero(v>0.5)[0]] | 提取a向量v> 0.5 的columms
 a(:,find(v>0.5)) | a[:,v.T>0.5] | 提取a列向量v> 0.5的列的列
 a(a<0.5)=0 | a[a<0.5]=0 | a 小于0.5的元素归零
-a .* (a>0.5) | a * (a>0.5) | a 小于0.5的元素归零
+a .\* (a>0.5) | a \* (a>0.5) | a 小于0.5的元素归零
 a(: ) = 3 | a[:] = 3 | 将所有值设置为相同的标量值
 y=x | y = x.copy() | numpy通过引用分配
 y=x(2,:) | y = x[1,:].copy() | numpy切片是参考
@@ -169,9 +169,9 @@ max(a,[],2) | a.max(1) | 每行矩阵的最大元素 a
 max(a,b) | maximum(a, b) | 比较a和b逐个元素，并返回每对中的最大值
 norm(v) | sqrt(v @ v) 要么 np.linalg.norm(v) | L2矢量的规范 v
 a & b | logical_and(a,b) | 逐个元素AND运算符（NumPy [ufunc](#备注)）[请参阅备注LOGICOPS](#备注)
-a | b | logical_or(a,b) | 逐个元素OR运算符（NumPy ufunc）请参阅注释LOGICOPS
+a \| b | logical_or(a,b) | 逐个元素OR运算符（NumPy ufunc）请参阅注释LOGICOPS
 bitand(a,b) | a & b | 按位AND运算符（Python native和NumPy ufunc）
-bitor(a,b) | a | b | 按位OR运算符（Python native和NumPy ufunc）
+bitor(a,b) | a \| b | 按位OR运算符（Python native和NumPy ufunc）
 inv(a) | linalg.inv(a) | 方阵的逆 a
 pinv(a) | linalg.pinv(a) | 矩阵的伪逆 a
 rank(a) | linalg.matrix_rank(a) | 二维数组/矩阵的矩阵秩 a
